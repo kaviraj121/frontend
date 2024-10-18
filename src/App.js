@@ -1,18 +1,14 @@
-import { useState } from 'react';
+// src/App.js
+import React from 'react';
 import PatientList from './components/PatientList';
-import PatientDetails from './components/PatientDetails';
-import AuthorizationForm from './components/AuthorizationForm';
 
-function App() {
-  const [selectedPatient, setSelectedPatient] = useState(null);
-
+const App = () => {
   return (
-    <div className="flex">
-      <PatientList selectPatient={setSelectedPatient} />
-      <PatientDetails patient={selectedPatient} />
-      {selectedPatient && <AuthorizationForm patient={selectedPatient} />}
+    <div className="container mx-auto p-4">
+      <h1 className="text-3xl font-bold text-center my-4">Patient Management System</h1>
+      <PatientList />
     </div>
   );
-}
+};
 
 export default App;

@@ -1,28 +1,39 @@
-import { useEffect, useState } from 'react';
+// src/components/PatientList.js
+import React, { useEffect, useState } from 'react';
+import PatientCard from './PatientCard';
 
-const PatientList = ({ selectPatient }) => {
+const PatientList = () => {
   const [patients, setPatients] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/patients')
-      .then(res => res.json())
-      .then(data => setPatients(data));
+    const fetchPatients = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/patients');
+        if (!response.ok) {
+          throw new Error('Failed to fetch patients');
+        }
+        const data = await response.json();
+        setPatients(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPatients();
   }, []);
 
+  if (loading) return <p className="text-center">Loading...</p>;
+  if (error) return <p className="text-center text-red-500">Error: {error}</p>;
+
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold">Patient List</h2>
-      <ul>
-        {patients.map(patient => (
-          <li
-            key={patient._id}
-            className="cursor-pointer hover:bg-gray-200 p-2"
-            onClick={() => selectPatient(patient)}
-          >
-            {patient.name} - {patient.age} years old
-          </li>
-        ))}
-      </ul>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-6">
+      {patients.map((patient) => (
+        <PatientCard key={patient._id} patient={patient} />
+      ))}
     </div>
   );
 };
