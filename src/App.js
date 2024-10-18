@@ -1,23 +1,16 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react';
+import PatientList from './components/PatientList';
+import PatientDetails from './components/PatientDetails';
+import AuthorizationForm from './components/AuthorizationForm';
 
 function App() {
+  const [selectedPatient, setSelectedPatient] = useState(null);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="flex">
+      <PatientList selectPatient={setSelectedPatient} />
+      <PatientDetails patient={selectedPatient} />
+      {selectedPatient && <AuthorizationForm patient={selectedPatient} />}
     </div>
   );
 }
